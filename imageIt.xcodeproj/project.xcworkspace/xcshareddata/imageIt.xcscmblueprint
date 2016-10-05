@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "DD292B682A4DAD7EDC4BA3612018C16C07625A22",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "DD292B682A4DAD7EDC4BA3612018C16C07625A22" : 0,
+    "AD0DEFB8E2EBE21B2A8A17178661A082A7255E06" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "65F15C14-AF87-4D20-8691-2CE112BCC5AF",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "DD292B682A4DAD7EDC4BA3612018C16C07625A22" : "imageIt\/",
+    "AD0DEFB8E2EBE21B2A8A17178661A082A7255E06" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "imageIt",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "imageIt.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:sureshb\/Test-Git-iOS-Project.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "AD0DEFB8E2EBE21B2A8A17178661A082A7255E06"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/sureshb\/imageIt.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "DD292B682A4DAD7EDC4BA3612018C16C07625A22"
+    }
+  ]
+}
