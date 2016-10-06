@@ -273,7 +273,8 @@ class imageItViewController: UIViewController, UIImagePickerControllerDelegate, 
                         "comments": "Updating..",
                         "userName": currentUserName,
                         "userImage": /*base64String*/ downloadURL,
-                        "category": self.selectedCat
+                        "category": self.selectedCat,
+                        "userId": currentUserID
                     ]
                     
                     let postKey = DataService.dataService.createNewComment(newPost)
@@ -291,10 +292,10 @@ class imageItViewController: UIViewController, UIImagePickerControllerDelegate, 
                     let refComments = refCommentsPath.childByAutoId()
                     refComments.setValue(newComment)
                     
-                    let newFollower = ["userId": ""]
-                    let refFollowPath = BASE_URL.child("/Posts/\(postKey)/followers")
-                    let refFollowers = refFollowPath.childByAutoId()
-                    refFollowers.setValue(newFollower)
+                    let newFavorite = ["userId": ""]
+                    let refFavoritePath = BASE_URL.child("/Posts/\(postKey)/favorites")
+                    let refFavorites = refFavoritePath.childByAutoId()
+                    refFavorites.setValue(newFavorite)
 
                     // Display globalView after sharing.
                     AppUtility.hideActivityOverlay()

@@ -16,6 +16,7 @@ class localContainerViewController: UIViewController {
     @IBOutlet weak var containerFavView: UIView!
     @IBOutlet weak var conateinerMyPostsView: UIView!
     
+    var gLocal = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,36 +25,54 @@ class localContainerViewController: UIViewController {
     
     
     @IBAction func loadMyPostsView(sender: AnyObject) {
+
+        if (gLocal) {
+            return
+        }
+        var fromFrame = self.containerFavView.frame
+        var toFrame = self.conateinerMyPostsView.frame
         
-//        UIView.animatewithDuration(0.5, animations: {
-//            self.conateinerMyPostsView.alpha = 1
-//            self.containerFavView.alpha = 0
-//        })
+        fromFrame.origin.x = self.view.frame.size.width + 20
+        toFrame.origin.x = -self.view.frame.size.width - 20
         
-        UIView.animateWithDuration(1.0, animations: { () -> Void in
-            //changes to animate
+        self.conateinerMyPostsView.frame = toFrame
+        
+        toFrame.origin.x = 0
+        
+        UIView.animateWithDuration(0.4, animations: { () -> Void in
+            self.conateinerMyPostsView.frame = toFrame
+            self.containerFavView.frame = fromFrame
             
-            self.conateinerMyPostsView.alpha = 1
-            self.containerFavView.alpha = 0
-
         })
-
         
+        gLocal = true
     }
     
     
     @IBAction func loadFavView(sender: AnyObject) {
-    
-
-        UIView.animateWithDuration(1.0, animations: { () -> Void in
-            //changes to animate
+        
+        if (!gLocal) {
+            return
+        }
+        
+        var fromFrame = self.conateinerMyPostsView.frame
+        var toFrame = self.containerFavView.frame
+        
+        fromFrame.origin.x = -self.view.frame.size.width - 20
+        toFrame.origin.x = self.view.frame.size.width + 20
+        
+        self.containerFavView.frame = toFrame
+        
+        toFrame.origin.x = 0
+        
+        UIView.animateWithDuration(0.4, animations: { () -> Void in
             
-            self.conateinerMyPostsView.alpha = 0
-            self.containerFavView.alpha = 1
+            self.conateinerMyPostsView.frame = fromFrame
+            self.containerFavView.frame = toFrame
             
         })
-
     
+        gLocal = false
     }
     
 }

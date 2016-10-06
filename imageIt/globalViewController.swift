@@ -126,25 +126,48 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
         let selectedComment = globalPost[sender.tag]
 
         if !sender.selected {
-            let newFollower = ["userId": currentUserID]
-            let refFollowPath = BASE_URL.child("/Posts/\(selectedComment.commentKey)/followers")
-            let refFollowers = refFollowPath.childByAutoId()
-            refFollowers.setValue(newFollower)
+            let newFavorite = ["userId": currentUserID]
+            let refFavoritePath = BASE_URL.child("/Posts/\(selectedComment.commentKey)/favorites")
+            let refFavorites = refFavoritePath.childByAutoId()
+            refFavorites.setValue(newFavorite)
             sender.selected = !sender.selected
         }
         else {
-            let follower = ["userId": currentUserID]
-            let keys = (selectedComment.followerDict as? NSDictionary)?.allKeysForObject(follower)
+            let favorite = ["userId": currentUserID]
+            let keys = (selectedComment.favoriteDict as? NSDictionary)?.allKeysForObject(favorite)
             
             for key in keys! {
-                let refFollowPath = BASE_URL.child("/Posts/\(selectedComment.commentKey)/followers/\(key as! String)")
-                print("/Posts/\(selectedComment.commentKey)/followers\(key as! String)")
+                let refFollowPath = BASE_URL.child("/Posts/\(selectedComment.commentKey)/favorites/\(key as! String)")
                 refFollowPath.removeValue()
                 sender.selected = !sender.selected
             }
         }
-        
-        
+    }
+    
+    func followUser(sender: UIButton) {
+        let selectedComment = globalPost[sender.tag]
+        if sender.selected {
+            let follow = ["userId": currentUserID]
+            let keys = (selectedComment.followDict as? NSDictionary)?.allKeysForObject(follow)
+            
+            for key in keys! {
+                let refFollowPath = BASE_URL.child("/Posts/\(selectedComment.commentKey)/followers/\(key as! String)")
+                refFollowPath.removeValue()
+                sender.selected = !sender.selected
+            }
+        }
+        else {
+            let newFollow = ["userId": currentUserID]
+            let refFollowPath = BASE_URL.child("/Posts/\(selectedComment.commentKey)/followers")
+            let refFollows = refFollowPath.childByAutoId()
+            refFollows.setValue(newFollow)
+            sender.selected = !sender.selected
+            
+//            let newFollowed = ["userId": selectedComment.userId]
+//            let refFollowedPath = BASE_URL.child("/Followed")
+//            let refFollowed = refFollowedPath.childByAutoId()
+//            refFollowed.setValue(newFollowed)
+        }
     }
     
     func updateSelectedChoice(selectedChoice:String, tag:Int) {
@@ -199,8 +222,10 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
         self.choicePost = self.choicePost.reverse()
         
         // isFollowed by Me?
-        let follower = ["userId": currentUserID]
-        let keys = (comment.followerDict as? NSDictionary)?.allKeysForObject(follower)
+        let favorite = ["userId": currentUserID]
+        let keys = (comment.favoriteDict as? NSDictionary)?.allKeysForObject(favorite)
+        
+        let followKeys = (comment.followDict as? NSDictionary)?.allKeysForObject(favorite)
         
         if let cell = tableView.dequeueReusableCellWithIdentifier("globalViewCell") as? globalFeedTableViewCell {
             if (cellViewImage != "") {
@@ -228,21 +253,43 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
             
             cell.likeButton.tag = indexPath.row
             cell.likeButton.addTarget(self, action: #selector(globalViewController.followPost(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            
+            cell.commentButton.tag = indexPath.row
+            
+            cell.followButton.tag = indexPath.row
+            cell.followButton.addTarget(self, action: #selector(globalViewController.followUser(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            
+            if comment.userId == currentUserID {
+                cell.followButton.hidden = true
+            }
+            
+            if (followKeys?.count > 0) {
+                cell.followButton.selected = true
+            }
+            else {
+                cell.followButton.selected = false
+            }
+            
             if keys?.count > 0 {
                 cell.likeButton.selected = true
             }
             //Update choise labels here after they have been sorted.
-            if (self.choicePost.count == 1 ) {
+            if (self.choicePost.count > 0 ) {
                 cell.choice1Label.text = self.choicePost[0]["userComment"] as? String
+                cell.voteNum1.text = "\(self.choicePost[0]["Like"] as! Int)"
+                cell.voteNum2.text = "0"
             }
-            else if (self.choicePost.count == 2) {
-                cell.choice1Label.text = self.choicePost[0]["userComment"] as? String
+            if (self.choicePost.count > 1) {
                 cell.choice2Label.text = self.choicePost[1]["userComment"] as? String
+
+                cell.voteNum2.text = "\(self.choicePost[1]["Like"] as! Int)"
             }
             
             cell.lblComments.text = "\(comment.tempDict.count - 1)"
-            cell.configureCell(comment)
+            cell.favoriteNum.text = "\(comment.favoriteDict.count - 1)"
             
+            cell.configureCell(comment)
+
             return cell
         }
         else {
@@ -259,8 +306,11 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
     
     // override segue and determine whcih buy button was pressed.
     override func prepareForSegue(segue: (UIStoryboardSegue!), sender: AnyObject!) {
-        if (segue.identifier == "buy1Segue") {
-            print("BUY 1 Button pressed")
+        if (segue.identifier == "showMoreComment") {
+            let index = (sender as! UIButton).tag
+            if segue.destinationViewController.isKindOfClass(MoreCommentViewController) {
+                (segue.destinationViewController as! MoreCommentViewController).globalPost = globalPost[index]
+            }
         }
         else if (segue.identifier == "buy2Segue") {
             print("BUY 2 Button pressed")

@@ -44,7 +44,6 @@ class newUserViewController: UIViewController {
                 
                 print (error)
                 print ("User already Exists")
-                
             }
             else {
                 
@@ -53,6 +52,13 @@ class newUserViewController: UIViewController {
                 
                 self.updateUserInfo()
                 
+                
+                // create my follow users field
+//                let currentUID = user?.uid
+//                let newFollowed: Dictionary<String, AnyObject> = ["userId": currentUID!]
+//                let refFollowedPath = BASE_URL.child("/Followed")
+//                let refFollowed = refFollowedPath.childByAutoId()
+//                refFollowed.setValue(newFollowed)
                 
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let vc = storyboard.instantiateViewControllerWithIdentifier("loginViewIdentifier") 

@@ -41,6 +41,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let user = user {
                 self.showTabBarController()
                 currentUserID = user.uid
+                if let email = user.email {
+                    currentUserEmail = email
+                }
             } else {
                 self.showLoginViewController()
             }

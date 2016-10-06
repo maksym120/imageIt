@@ -12,6 +12,8 @@
 		4D87AA0C1D9B353800BD7AE5 /* ImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D87AA091D9B353800BD7AE5 /* ImageCache.m */; };
 		4D87AA0D1D9B353800BD7AE5 /* UIImage+ImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D87AA0B1D9B353800BD7AE5 /* UIImage+ImageCache.m */; };
 		4D97C36F1D9D747000ED3A9D /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D97C36E1D9D747000ED3A9D /* Utility.swift */; };
+		4DECFCEA1DA657290027052B /* MoreCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DECFCE91DA657290027052B /* MoreCommentViewController.swift */; };
+		4DECFCEC1DA6A2970027052B /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DECFCEB1DA6A2970027052B /* FavoriteViewController.swift */; };
 		B90DC7831D94731C00AA7391 /* locationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90DC7821D94731C00AA7391 /* locationController.swift */; };
 		B90DC7851D947CC400AA7391 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B90DC7841D947CC400AA7391 /* CoreLocation.framework */; };
 		B9181C911D47E75000EBDE6D /* globalFeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9181C901D47E75000EBDE6D /* globalFeedTableViewCell.swift */; };
@@ -65,6 +67,8 @@
 		4D87AA0A1D9B353800BD7AE5 /* UIImage+ImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageCache.h"; sourceTree = "<group>"; };
 		4D87AA0B1D9B353800BD7AE5 /* UIImage+ImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageCache.m"; sourceTree = "<group>"; };
 		4D97C36E1D9D747000ED3A9D /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		4DECFCE91DA657290027052B /* MoreCommentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreCommentViewController.swift; sourceTree = "<group>"; };
+		4DECFCEB1DA6A2970027052B /* FavoriteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
 		7A03411333A46995184BC709 /* Pods-imageIt.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-imageIt.debug.xcconfig"; path = "Pods/Target Support Files/Pods-imageIt/Pods-imageIt.debug.xcconfig"; sourceTree = "<group>"; };
 		B90DC7821D94731C00AA7391 /* locationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = locationController.swift; sourceTree = "<group>"; };
 		B90DC7841D947CC400AA7391 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -135,6 +139,7 @@
 				B9A644E11D383A8100FF09A9 /* globalViewController.swift */,
 				4D0EDC541DA2AE7B0097A2B0 /* FollowingViewController.swift */,
 				B9181C901D47E75000EBDE6D /* globalFeedTableViewCell.swift */,
+				4DECFCE91DA657290027052B /* MoreCommentViewController.swift */,
 			);
 			name = Global;
 			sourceTree = "<group>";
@@ -144,6 +149,7 @@
 			children = (
 				B9DCAC271D95DAAC005F2CA2 /* localContainerView.swift */,
 				B9A644DF1D383A7500FF09A9 /* localViewController.swift */,
+				4DECFCEB1DA6A2970027052B /* FavoriteViewController.swift */,
 			);
 			name = "My Post";
 			sourceTree = "<group>";
@@ -460,6 +466,7 @@
 				B9DCAC281D95DAAC005F2CA2 /* localContainerView.swift in Sources */,
 				B9A644E21D383A8100FF09A9 /* globalViewController.swift in Sources */,
 				B90DC7831D94731C00AA7391 /* locationController.swift in Sources */,
+				4DECFCEC1DA6A2970027052B /* FavoriteViewController.swift in Sources */,
 				B9A0E5531D98E99300D7E367 /* globalViewContainer.swift in Sources */,
 				B9A644EE1D3AE09A00FF09A9 /* moreViewController.swift in Sources */,
 				4D97C36F1D9D747000ED3A9D /* Utility.swift in Sources */,
@@ -469,6 +476,7 @@
 				4D87AA0C1D9B353800BD7AE5 /* ImageCache.m in Sources */,
 				4D0EDC551DA2AE7B0097A2B0 /* FollowingViewController.swift in Sources */,
 				B9A644F21D3AE1B000FF09A9 /* DataService.swift in Sources */,
+				4DECFCEA1DA657290027052B /* MoreCommentViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

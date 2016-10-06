@@ -22,10 +22,12 @@ class Posts {
     var _userImage: String!
     var _userName: String!
     var _postCat: String!
+    var _userId: String!
 //    var commentsDict:tempCommentsDict!
     
     var _tempDict: Dictionary = Dictionary<String, AnyObject>()
-    var _followerDict: Dictionary = Dictionary<String, AnyObject>()
+    var _favoriteDict: Dictionary = Dictionary<String, AnyObject>()
+    var _followDict: Dictionary = Dictionary<String, AnyObject>()
     
     var tempDict: Dictionary <String,AnyObject> {
     
@@ -33,8 +35,12 @@ class Posts {
     
     }
     
-    var followerDict: Dictionary <String, AnyObject> {
-        return _followerDict
+    var favoriteDict: Dictionary <String, AnyObject> {
+        return _favoriteDict
+    }
+    
+    var followDict: Dictionary <String, AnyObject> {
+        return _followDict
     }
     
     var commentKey: String {
@@ -67,7 +73,9 @@ class Posts {
         
     }
 
-    
+    var userId: String {
+        return _userId
+    }
     
     //init the class here
     init ( key: String, dictionary: Dictionary<String,AnyObject>) {
@@ -93,6 +101,10 @@ class Posts {
             
         }
         
+        if let userId = dictionary["userId"] as? String {
+            self._userId = userId
+        }
+        
         if let postCat = dictionary["category"] as? String {
             
             self._postCat = postCat
@@ -107,9 +119,13 @@ class Posts {
         
         }
         
-        if let followerDict = dictionary["followers"] as? Dictionary <String, AnyObject> {
+        if let favoriteDict = dictionary["favorites"] as? Dictionary <String, AnyObject> {
             
-            self._followerDict = followerDict
+            self._favoriteDict = favoriteDict
+        }
+        
+        if let followDict = dictionary["followers"] as? Dictionary <String, AnyObject> {
+            self._followDict = followDict
         }
         
         self._commentRef = DataService.dataService.POST_REF.child(self._commentKey)

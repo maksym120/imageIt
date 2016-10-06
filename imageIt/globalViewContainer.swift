@@ -17,6 +17,7 @@ class globalContainerViewController: UIViewController {
     
     @IBOutlet weak var followedViewContainer: UIView!
     
+    var bGlobal = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +27,9 @@ class globalContainerViewController: UIViewController {
     
     @IBAction func loadGlobaklFeedView(sender: AnyObject) {
         
+        if (bGlobal) {
+            return
+        }
         var fromFrame = self.followedViewContainer.frame
         var toFrame = self.globalViewContainer.frame
         
@@ -36,16 +40,22 @@ class globalContainerViewController: UIViewController {
         
         toFrame.origin.x = 0
         
-        UIView.animateWithDuration(1.0, animations: { () -> Void in
+        UIView.animateWithDuration(0.4, animations: { () -> Void in
             self.globalViewContainer.frame = toFrame
             self.followedViewContainer.frame = fromFrame
             
-                    })
+        })
+        
+        bGlobal = true
     }
     
     
     @IBAction func loadFollowingView(sender: AnyObject) {
    
+        if !bGlobal {
+            return
+        }
+        
         var fromFrame = self.globalViewContainer.frame
         var toFrame = self.followedViewContainer.frame
         
@@ -56,12 +66,14 @@ class globalContainerViewController: UIViewController {
         
         toFrame.origin.x = 0
         
-        UIView.animateWithDuration(1.0, animations: { () -> Void in
+        UIView.animateWithDuration(0.4, animations: { () -> Void in
             
             self.globalViewContainer.frame = fromFrame
             self.followedViewContainer.frame = toFrame
             
         })
+        
+        bGlobal = false
     }
     
         

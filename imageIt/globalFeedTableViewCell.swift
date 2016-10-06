@@ -56,9 +56,12 @@ class globalFeedTableViewCell: UITableViewCell, UITextFieldDelegate {
     
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var commentButton: UIButton!
+    @IBOutlet weak var followButton: UIButton!
     
     @IBOutlet weak var lblComments: UILabel!
-    
+    @IBOutlet weak var voteNum1: UILabel!
+    @IBOutlet weak var voteNum2: UILabel!
+    @IBOutlet weak var favoriteNum: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -68,7 +71,7 @@ class globalFeedTableViewCell: UITableViewCell, UITextFieldDelegate {
         
         self.globalPost = globalPost
 
-        globalPosterNameLabel.text = globalPost.userName + " posted"
+        globalPosterNameLabel.text = globalPost.useremail + " posted"
 
         // fix image size in the cell.
         let itemSize = CGSizeMake(500, 500);
@@ -109,6 +112,11 @@ class globalFeedTableViewCell: UITableViewCell, UITextFieldDelegate {
         nearbyQButton.layer.cornerRadius = 5
         nearbyQButton.layer.borderWidth = 0.5
         nearbyQButton.layer.borderColor = UIColor.blueColor().CGColor
+        
+        followButton.setTitle("Follow", forState: UIControlState.Normal)
+        followButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        followButton.setTitle("UnFollow", forState: UIControlState.Selected)
+        followButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Selected)
         
         UIGraphicsEndImageContext()
     }

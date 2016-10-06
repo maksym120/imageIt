@@ -150,6 +150,14 @@ class Utility: NSObject {
                 print("SUCESS")
                 completionClosure(success: true)
                 currentUserID = user!.uid
+                if let email = user?.email {
+                    currentUserEmail = email
+                }
+//                
+//                let newFollowed: Dictionary<String, AnyObject> = ["userId": currentUserID]
+//                let refFollowedPath = BASE_URL.child("/Followed")
+//                let refFollowed = refFollowedPath.childByAutoId()
+//                refFollowed.setValue(newFollowed)
             }
             else {
                 print(error?.description)

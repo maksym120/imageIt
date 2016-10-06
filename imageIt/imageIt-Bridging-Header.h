@@ -12,5 +12,4 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "ImageCache.h"
 #import "UIImage+ImageCache.h"
-#import "TwitterAuthHelper.h"
 #endif /* imageIt_Bridging_Header_h */
