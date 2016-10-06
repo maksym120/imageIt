@@ -71,7 +71,13 @@ class globalFeedTableViewCell: UITableViewCell, UITextFieldDelegate {
         
         self.globalPost = globalPost
 
-        globalPosterNameLabel.text = globalPost.useremail + " posted"
+        if globalPost.userName == "nil"
+        {
+            globalPosterNameLabel.text = globalPost.useremail + " posted"
+        }
+        else {
+            globalPosterNameLabel.text = globalPost.userName + " posted"
+        }
 
         // fix image size in the cell.
         let itemSize = CGSizeMake(500, 500);
@@ -113,10 +119,8 @@ class globalFeedTableViewCell: UITableViewCell, UITextFieldDelegate {
         nearbyQButton.layer.borderWidth = 0.5
         nearbyQButton.layer.borderColor = UIColor.blueColor().CGColor
         
-        followButton.setTitle("Follow", forState: UIControlState.Normal)
-        followButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        followButton.setTitle("UnFollow", forState: UIControlState.Selected)
-        followButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Selected)
+        followButton.setImage(UIImage(named: "follow.png"), forState: UIControlState.Normal)
+        followButton.setImage(UIImage(named: "following.png"), forState: UIControlState.Selected)
         
         UIGraphicsEndImageContext()
     }

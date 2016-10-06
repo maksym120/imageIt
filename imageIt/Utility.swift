@@ -95,6 +95,12 @@ class Utility: NSObject {
             }
             else {
                 currentUserID = user!.uid
+                if let username = user?.displayName {
+                    currentUserName = username
+                }
+                if let useremail = user?.email {
+                    currentUserEmail = useremail
+                }
                 compleionClosure(success: true)
             }
             
@@ -150,8 +156,11 @@ class Utility: NSObject {
                 print("SUCESS")
                 completionClosure(success: true)
                 currentUserID = user!.uid
-                if let email = user?.email {
-                    currentUserEmail = email
+                if let username = user?.displayName {
+                    currentUserName = username
+                }
+                if let useremail = user?.email {
+                    currentUserEmail = useremail
                 }
 //                
 //                let newFollowed: Dictionary<String, AnyObject> = ["userId": currentUserID]

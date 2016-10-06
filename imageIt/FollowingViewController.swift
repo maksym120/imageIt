@@ -159,7 +159,6 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
             let refFollows = refFollowPath.childByAutoId()
             refFollows.setValue(newFollow)
             sender.selected = !sender.selected
-            
             //            let newFollowed = ["userId": selectedComment.userId]
             //            let refFollowedPath = BASE_URL.child("/Followed")
             //            let refFollowed = refFollowedPath.childByAutoId()

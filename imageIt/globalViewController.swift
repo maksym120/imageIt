@@ -153,8 +153,7 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
             for key in keys! {
                 let refFollowPath = BASE_URL.child("/Posts/\(selectedComment.commentKey)/followers/\(key as! String)")
                 refFollowPath.removeValue()
-                sender.selected = !sender.selected
-            }
+                sender.selected = !sender.selected            }
         }
         else {
             let newFollow = ["userId": currentUserID]
@@ -162,7 +161,6 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
             let refFollows = refFollowPath.childByAutoId()
             refFollows.setValue(newFollow)
             sender.selected = !sender.selected
-            
 //            let newFollowed = ["userId": selectedComment.userId]
 //            let refFollowedPath = BASE_URL.child("/Followed")
 //            let refFollowed = refFollowedPath.childByAutoId()

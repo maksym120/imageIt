@@ -18,9 +18,15 @@ class globalContainerViewController: UIViewController {
     @IBOutlet weak var followedViewContainer: UIView!
     
     var bGlobal = true
+    var kColor: UIColor!
     
+    @IBOutlet weak var followingBorder: UIView!
+    @IBOutlet weak var globalBorder: UIView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        kColor = globalBorder.backgroundColor
+        followingBorder.backgroundColor = UIColor.whiteColor()
     }
     
 
@@ -46,6 +52,8 @@ class globalContainerViewController: UIViewController {
             
         })
         
+        followingBorder.backgroundColor = UIColor.whiteColor()
+        globalBorder.backgroundColor = kColor
         bGlobal = true
     }
     
@@ -73,6 +81,8 @@ class globalContainerViewController: UIViewController {
             
         })
         
+        globalBorder.backgroundColor = UIColor.whiteColor()
+        followingBorder.backgroundColor = kColor
         bGlobal = false
     }
     
