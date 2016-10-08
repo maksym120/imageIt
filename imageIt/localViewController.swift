@@ -104,21 +104,31 @@ class localViewController: UIViewController,UITableViewDelegate,UITableViewDataS
     }
     
     @IBAction func choice1Liked (sender: UIButton) {
+        
+        if sender.selected {
+            return
+        }
+        
         let indexPath = NSIndexPath(forRow: sender.tag, inSection: 0) // This defines what indexPath is which is used later to define a cell
         let customCell = tableView.cellForRowAtIndexPath(indexPath) as! globalFeedTableViewCell! // This is where the magic happens - reference to the cell
-        let selectedComment = globalPost[sender.tag]
         
         // Now search the comments and if there is a match, update the Like option.
         self.updateSelectedChoice(customCell.choice1Label.text!, tag: sender.tag)
-        
+        sender.selected = !sender.selected
         
     }
     
     @IBAction func choice2Liked (sender: UIButton) {
+        if sender.selected {
+            return
+        }
         let indexPath = NSIndexPath(forRow: sender.tag, inSection: 0) // This defines what indexPath is which is used later to define a cell
         let customCell = tableView.cellForRowAtIndexPath(indexPath) as! globalFeedTableViewCell! // This is where the magic happens - reference to the cell
         self.updateSelectedChoice(customCell.choice2Label.text!, tag: sender.tag)
+        
+        sender.selected = !sender.selected
     }
+
     
     func followPost (sender: UIButton) {
         let indexPath = NSIndexPath(forRow: sender.tag, inSection: 0) // This defines what indexPath is which is used later to define a cell
@@ -277,11 +287,39 @@ class localViewController: UIViewController,UITableViewDelegate,UITableViewDataS
                 cell.choice1Label.text = self.choicePost[0]["userComment"] as? String
                 cell.voteNum1.text = "\(self.choicePost[0]["Like"] as! Int)"
                 cell.voteNum2.text = "0"
+                
+                if (self.choicePost[0]["likes"] != nil) {
+                    var likesDict: Dictionary = Dictionary <String, AnyObject>()
+                    likesDict = (self.choicePost[0]["likes"] as? Dictionary <String, AnyObject>)!
+                    print(likesDict)
+                    let like = ["userId": currentUserID]
+                    let likeKeys = (likesDict as? NSDictionary)?.allKeysForObject(like)
+                    if (likeKeys?.count > 0) {
+                        cell.choice1LikeButton.selected = true
+                    }
+                    else {
+                        cell.choice1LikeButton.selected = false
+                    }
+                }
             }
             if (self.choicePost.count > 1) {
                 cell.choice2Label.text = self.choicePost[1]["userComment"] as? String
                 
                 cell.voteNum2.text = "\(self.choicePost[1]["Like"] as! Int)"
+                
+                if (self.choicePost[1]["likes"] != nil) {
+                    var likesDict: Dictionary = Dictionary <String, AnyObject>()
+                    likesDict = (self.choicePost[1]["likes"] as? Dictionary <String, AnyObject>)!
+                    print(likesDict)
+                    let like = ["userId": currentUserID]
+                    let likeKeys = (likesDict as? NSDictionary)?.allKeysForObject(like)
+                    if (likeKeys?.count > 0) {
+                        cell.choice2LikeButton.selected = true
+                    }
+                    else {
+                        cell.choice2LikeButton.selected = false
+                    }
+                }
             }
             
             cell.lblComments.text = "\(comment.tempDict.count - 1)"

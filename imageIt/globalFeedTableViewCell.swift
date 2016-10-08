@@ -122,6 +122,18 @@ class globalFeedTableViewCell: UITableViewCell, UITextFieldDelegate {
         followButton.setImage(UIImage(named: "follow.png"), forState: UIControlState.Normal)
         followButton.setImage(UIImage(named: "following.png"), forState: UIControlState.Selected)
         
+        likeButton.setImage(UIImage(named: "Favorite-default.png"), forState: UIControlState.Normal)
+        likeButton.setImage(UIImage(named: "Favorite.png"), forState: UIControlState.Selected)
+        
+        choice1LikeButton.setImage(UIImage(named: "like-neutral.png"), forState: UIControlState.Normal)
+        choice1LikeButton.setImage(UIImage(named: "liked.png"), forState: UIControlState.Selected)
+        
+        choice2LikeButton.setImage(UIImage(named: "like-neutral.png"), forState: UIControlState.Normal)
+        choice2LikeButton.setImage(UIImage(named: "liked.png"), forState: UIControlState.Selected)
+        
+        choice1Label.text = "0"
+        choice2Label.text = "0"
+        
         UIGraphicsEndImageContext()
     }
 }

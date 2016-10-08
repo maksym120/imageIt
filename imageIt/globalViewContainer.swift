@@ -26,7 +26,7 @@ class globalContainerViewController: UIViewController {
         super.viewDidLoad()
         
         kColor = globalBorder.backgroundColor
-        followingBorder.backgroundColor = UIColor.whiteColor()
+        followingBorder.backgroundColor = UIColor.clearColor()
     }
     
 
@@ -52,7 +52,7 @@ class globalContainerViewController: UIViewController {
             
         })
         
-        followingBorder.backgroundColor = UIColor.whiteColor()
+        followingBorder.backgroundColor = UIColor.clearColor()
         globalBorder.backgroundColor = kColor
         bGlobal = true
     }
@@ -81,7 +81,7 @@ class globalContainerViewController: UIViewController {
             
         })
         
-        globalBorder.backgroundColor = UIColor.whiteColor()
+        globalBorder.backgroundColor = UIColor.clearColor()
         followingBorder.backgroundColor = kColor
         bGlobal = false
     }

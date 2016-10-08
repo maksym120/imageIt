@@ -24,7 +24,7 @@ class localContainerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         kColor = myPostBorder.backgroundColor
-        favoriteBorder.backgroundColor = UIColor.whiteColor()
+        favoriteBorder.backgroundColor = UIColor.clearColor()
     }
 
     
@@ -50,7 +50,7 @@ class localContainerViewController: UIViewController {
             
         })
         
-        favoriteBorder.backgroundColor = UIColor.whiteColor()
+        favoriteBorder.backgroundColor = UIColor.clearColor()
         myPostBorder.backgroundColor = kColor
         gLocal = true
     }
@@ -79,8 +79,8 @@ class localContainerViewController: UIViewController {
             
         })
     
-        myPostBorder.backgroundColor = UIColor.whiteColor()
-        myPostBorder.backgroundColor = kColor
+        myPostBorder.backgroundColor = UIColor.clearColor()
+        favoriteBorder.backgroundColor = kColor
         gLocal = false
     }
     
