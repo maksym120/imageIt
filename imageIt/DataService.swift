@@ -21,6 +21,7 @@ class DataService {
     private var _POST_REF = BASE_URL.child("Posts")
     private var _USERCOMMENTS_REF = BASE_URL.child("comments")
     private var _FOLLOWERS_REF = BASE_URL.child("followers")
+    private var _USER_REF = BASE_URL.child("Users")
     
     var BASE_REF: FIRDatabaseReference {
         return _BASE_REF
@@ -42,6 +43,9 @@ class DataService {
         return _POST_REF
     }
     
+    var USER_REF: FIRDatabaseReference {
+        return _USER_REF
+    }
     
     var USERCOMMENTS_REF: FIRDatabaseReference {
         return _USERCOMMENTS_REF
@@ -58,7 +62,13 @@ class DataService {
         USEREMAIL_REF.child(uid).setValue(user)
     }
     
-    
+    func createNewUser(user: Dictionary<String, AnyObject>) -> String {
+        let firebaseNewUser = USER_REF.childByAutoId()
+        
+        firebaseNewUser.setValue(user)
+        
+        return firebaseNewUser.key
+    }
     
     func createNewComment(post: Dictionary<String, AnyObject>) -> String {
         

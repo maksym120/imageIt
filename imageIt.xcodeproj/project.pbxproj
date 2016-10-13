@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		4D0EDC551DA2AE7B0097A2B0 /* FollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0EDC541DA2AE7B0097A2B0 /* FollowingViewController.swift */; };
+		4D5387871DA8A15200051BB3 /* user-3.png in Resources */ = {isa = PBXBuildFile; fileRef = 4D5387861DA8A15200051BB3 /* user-3.png */; };
+		4D57CC981DAD45C700E00A88 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D57CC971DAD45C700E00A88 /* User.swift */; };
+		4D57CC9A1DAE060100E00A88 /* completeProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D57CC991DAE060100E00A88 /* completeProfileViewController.swift */; };
 		4D86D7751D9EE027003B1FF6 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D86D7741D9EE027003B1FF6 /* Accounts.framework */; };
 		4D87AA0C1D9B353800BD7AE5 /* ImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D87AA091D9B353800BD7AE5 /* ImageCache.m */; };
 		4D87AA0D1D9B353800BD7AE5 /* UIImage+ImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D87AA0B1D9B353800BD7AE5 /* UIImage+ImageCache.m */; };
@@ -67,6 +70,9 @@
 		0556B646355F292EAA1B00D9 /* Pods-imageIt.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-imageIt.release.xcconfig"; path = "Pods/Target Support Files/Pods-imageIt/Pods-imageIt.release.xcconfig"; sourceTree = "<group>"; };
 		280ACFCCCB48CED8EF087ECE /* Pods_imageIt.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_imageIt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D0EDC541DA2AE7B0097A2B0 /* FollowingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowingViewController.swift; sourceTree = "<group>"; };
+		4D5387861DA8A15200051BB3 /* user-3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user-3.png"; sourceTree = "<group>"; };
+		4D57CC971DAD45C700E00A88 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		4D57CC991DAE060100E00A88 /* completeProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = completeProfileViewController.swift; sourceTree = "<group>"; };
 		4D86D7741D9EE027003B1FF6 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		4D87AA061D9B2B8600BD7AE5 /* imageIt-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "imageIt-Bridging-Header.h"; sourceTree = "<group>"; };
 		4D87AA081D9B353800BD7AE5 /* ImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCache.h; sourceTree = "<group>"; };
@@ -158,6 +164,16 @@
 			name = Global;
 			sourceTree = "<group>";
 		};
+		4D57CC961DAD45A500E00A88 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B9A644EF1D3AE16700FF09A9 /* Posts.swift */,
+				B9A644F11D3AE1B000FF09A9 /* DataService.swift */,
+				4D57CC971DAD45C700E00A88 /* User.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		4D6B9C501DA4DFB0005D7E08 /* My Post */ = {
 			isa = PBXGroup;
 			children = (
@@ -182,6 +198,7 @@
 		4D97C36B1D9D722D00ED3A9D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				4D5387861DA8A15200051BB3 /* user-3.png */,
 				4DB52F2F1DA884E700682592 /* like-neutral.png */,
 				4DB52F301DA884E700682592 /* liked.png */,
 				4DA55AB21DA81A3D00ED7958 /* favorite-default.png */,
@@ -209,6 +226,7 @@
 			children = (
 				B9A644EB1D3ADC1000FF09A9 /* newUserViewController.swift */,
 				B9A644E91D38CE4A00FF09A9 /* loginViewController.swift */,
+				4D57CC991DAE060100E00A88 /* completeProfileViewController.swift */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -263,6 +281,7 @@
 		B9A644AE1D3800CB00FF09A9 /* imageIt */ = {
 			isa = PBXGroup;
 			children = (
+				4D57CC961DAD45A500E00A88 /* Model */,
 				4D6B9C501DA4DFB0005D7E08 /* My Post */,
 				4D0EDC531DA279050097A2B0 /* Global */,
 				4D97C36D1D9D744300ED3A9D /* Utility */,
@@ -286,8 +305,6 @@
 				B939E7441D8F3E0300B1D6CB /* moreSearchResults.swift */,
 				B90DC7821D94731C00AA7391 /* locationController.swift */,
 				B9A644F31D3AE1DB00FF09A9 /* Constants.swift */,
-				B9A644EF1D3AE16700FF09A9 /* Posts.swift */,
-				B9A644F11D3AE1B000FF09A9 /* DataService.swift */,
 				B9A644E71D38CB3C00FF09A9 /* GoogleService-Info.plist */,
 				B9A644BD1D3800CB00FF09A9 /* Info.plist */,
 				B9A644B81D3800CB00FF09A9 /* Assets.xcassets */,
@@ -404,6 +421,7 @@
 				B9A644B71D3800CB00FF09A9 /* Main.storyboard in Resources */,
 				4DB52F321DA884E700682592 /* liked.png in Resources */,
 				B9A0E5551D99903000D7E367 /* placeholder.png in Resources */,
+				4D5387871DA8A15200051BB3 /* user-3.png in Resources */,
 				B9DCAC021D95B2D6005F2CA2 /* me.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -480,10 +498,12 @@
 				B9A644E41D383A9100FF09A9 /* imageitViewController.swift in Sources */,
 				B92441B61D46B6C20034E892 /* localFeedTableViewCell.swift in Sources */,
 				4D87AA0D1D9B353800BD7AE5 /* UIImage+ImageCache.m in Sources */,
+				4D57CC9A1DAE060100E00A88 /* completeProfileViewController.swift in Sources */,
 				B9EF93E91D88930B0021EF75 /* geoBuyViewController.swift in Sources */,
 				B9CE08781D820940005D2F48 /* buyViewController.swift in Sources */,
 				B939E7451D8F3E0300B1D6CB /* moreSearchResults.swift in Sources */,
 				B9EF93EB1D8893230021EF75 /* geoBuyViewControllerCell.swift in Sources */,
+				4D57CC981DAD45C700E00A88 /* User.swift in Sources */,
 				B9A644F41D3AE1DB00FF09A9 /* Constants.swift in Sources */,
 				B9F3EADF1D8742410014EA01 /* buyViewControllerCell.swift in Sources */,
 				B99CC19D1D8A22C00031015A /* recViewControllerCell.swift in Sources */,

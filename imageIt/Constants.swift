@@ -14,6 +14,8 @@ let UserDefaults = NSUserDefaults.standardUserDefaults() as NSUserDefaults
 let NotificationCenter = NSNotificationCenter.defaultCenter() as NSNotificationCenter
 let ApplicationDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
+let COLOR_BLUE = UIColor(red: 0.0, green: 122/255, blue: 1.0, alpha: 1.0)
+
 let USER_EMAIL = "userEmail"
 let USER_PASS = "userPassword"
 let FB_TOKEN = "FBToken"
@@ -22,6 +24,7 @@ let ACCESS_TOKEN = "AccessToken"
 let TWITTER_TOKEN = "TwitterToken"
 let TWITTER_SECRET = "TwitterSecret"
 
-var currentUserEmail = "nil"
-var currentUserName = "nil"
+var userName = ""
 var currentUserID = ""
+var currentUser: User! = User()
+var isComplete = false

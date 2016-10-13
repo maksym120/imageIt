@@ -19,7 +19,7 @@ class globalFeedTableViewCell: UITableViewCell, UITextFieldDelegate {
     
     @IBOutlet weak var globalImageView: UIImageView!
     
-//    @IBOutlet weak var globalCommentLabel: UILabel!
+    @IBOutlet weak var profileImageView: UIImageView!
     
     @IBOutlet weak var globalTextField: UITextField!
     
@@ -30,21 +30,14 @@ class globalFeedTableViewCell: UITableViewCell, UITextFieldDelegate {
     
     @IBOutlet weak var choice2Label: UILabel!
     
-//    @IBOutlet weak var choice3Label: UILabel!
-    
     
     @IBOutlet weak var choice1LikeButton: UIButton!
     
     @IBOutlet weak var choice2LikeButton: UIButton!
     
-    @IBOutlet weak var choice3LikeButton: UIButton!
+    @IBOutlet weak var choice1BuyButton: UIButton!
     
-    @IBOutlet weak var choice1disLikeButton: UIButton!
-    
-    @IBOutlet weak var choice2disLikeButton: UIButton!
-    
-//    @IBOutlet weak var choice3disLikeButton: UIButton!
-    
+    @IBOutlet weak var choice2BuyButton: UIButton!
     
     @IBOutlet weak var geoLocationLabel: UILabel!
     
@@ -105,6 +98,9 @@ class globalFeedTableViewCell: UITableViewCell, UITextFieldDelegate {
         
         }
         
+        profileImageView.clipsToBounds = true
+        profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
+        
         // this rounds the label corners
         geoLocationLabel.layer.masksToBounds = true
         geoLocationLabel.layer.cornerRadius = 8.0
@@ -131,8 +127,17 @@ class globalFeedTableViewCell: UITableViewCell, UITextFieldDelegate {
         choice2LikeButton.setImage(UIImage(named: "like-neutral.png"), forState: UIControlState.Normal)
         choice2LikeButton.setImage(UIImage(named: "liked.png"), forState: UIControlState.Selected)
         
-        choice1Label.text = "0"
-        choice2Label.text = "0"
+        lblComments.text = "0"
+        favoriteNum.text = "0"
+        voteNum1.text = "0"
+        voteNum2.text = "0"
+        choice1Label.text = "Choice 1"
+        choice2Label.text = "Choice 2"
+        choice1LikeButton.selected = false
+        choice2LikeButton.selected = false
+        followButton.hidden = false
+        followButton.selected = false
+        likeButton.selected = false
         
         UIGraphicsEndImageContext()
     }

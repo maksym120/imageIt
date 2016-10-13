@@ -12,7 +12,6 @@ import Firebase
 
 class globalViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate  {
     
-
     var globalPost = [Posts]()
     
     var choicePost = [ Dictionary<String, AnyObject>() ] // use this to store comments sorted by Likes
@@ -21,6 +20,9 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
     var globalCommentsDict = Dictionary<String, AnyObject>() // declare empty dictionary to store user comments
 
     var cache:NSCache!
+    
+    var commentLimit: UInt = 2
+    var loadNum: UInt = 0
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -65,7 +67,7 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
         // Dispose of any resources that can be recreated.
     }
     
-    // User adds comments to global feed.
+    //MARK: add Comment
     @IBAction func addComment(sender: UIButton) {
         let indexPath = NSIndexPath(forRow: sender.tag, inSection: 0) // This defines what indexPath is which is used later to define a cell. Look in cellforrowatindexpath for additional line to detect the clicked cell.
         let customCell = tableView.cellForRowAtIndexPath(indexPath) as! globalFeedTableViewCell! // This is where the magic happens - reference to the cell
@@ -74,10 +76,11 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
     //addup all comments here.
         if ( customCell.globalTextField.text != "") {
             
-            var addComment =  customCell.globalTextField.text!
+            let addComment =  customCell.globalTextField.text!
+            customCell.globalTextField.text = ""
             
             //Every new comment has 0 likes and dislikes.
-            globalCommentsDict["userName"] = currentUserName
+            globalCommentsDict["userName"] = currentUser.userName
             globalCommentsDict["userComment"] = addComment
             globalCommentsDict["Like"] = 0
             globalCommentsDict["Dislike"] = 0
@@ -103,6 +106,7 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
         }
     }
     
+    //MARK: UpVote
     @IBAction func choice1Liked (sender: UIButton) {
         
         if sender.selected {
@@ -113,6 +117,9 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
         let customCell = tableView.cellForRowAtIndexPath(indexPath) as! globalFeedTableViewCell! // This is where the magic happens - reference to the cell
         
         // Now search the comments and if there is a match, update the Like option.
+        if customCell.choice1Label.text! == "Choice 1" {
+            return
+        }
         self.updateSelectedChoice(customCell.choice1Label.text!, tag: sender.tag)
         sender.selected = !sender.selected
         
@@ -124,57 +131,12 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
         }
         let indexPath = NSIndexPath(forRow: sender.tag, inSection: 0) // This defines what indexPath is which is used later to define a cell
         let customCell = tableView.cellForRowAtIndexPath(indexPath) as! globalFeedTableViewCell! // This is where the magic happens - reference to the cell
+        if customCell.choice2Label.text! == "Choice 2" {
+            return
+        }
         self.updateSelectedChoice(customCell.choice2Label.text!, tag: sender.tag)
         
         sender.selected = !sender.selected
-    }
-
-    func followPost (sender: UIButton) {
-        let indexPath = NSIndexPath(forRow: sender.tag, inSection: 0) // This defines what indexPath is which is used later to define a cell
-        let customCell = tableView.cellForRowAtIndexPath(indexPath) as! globalFeedTableViewCell! // This is where the magic happens - reference to the cell
-        let selectedComment = globalPost[sender.tag]
-
-        if !sender.selected {
-            let newFavorite = ["userId": currentUserID]
-            let refFavoritePath = BASE_URL.child("/Posts/\(selectedComment.commentKey)/favorites")
-            let refFavorites = refFavoritePath.childByAutoId()
-            refFavorites.setValue(newFavorite)
-            sender.selected = !sender.selected
-        }
-        else {
-            let favorite = ["userId": currentUserID]
-            let keys = (selectedComment.favoriteDict as? NSDictionary)?.allKeysForObject(favorite)
-            
-            for key in keys! {
-                let refFollowPath = BASE_URL.child("/Posts/\(selectedComment.commentKey)/favorites/\(key as! String)")
-                refFollowPath.removeValue()
-                sender.selected = !sender.selected
-            }
-        }
-    }
-    
-    func followUser(sender: UIButton) {
-        let selectedComment = globalPost[sender.tag]
-        if sender.selected {
-            let follow = ["userId": currentUserID]
-            let keys = (selectedComment.followDict as? NSDictionary)?.allKeysForObject(follow)
-            
-            for key in keys! {
-                let refFollowPath = BASE_URL.child("/Posts/\(selectedComment.commentKey)/followers/\(key as! String)")
-                refFollowPath.removeValue()
-                sender.selected = !sender.selected            }
-        }
-        else {
-            let newFollow = ["userId": currentUserID]
-            let refFollowPath = BASE_URL.child("/Posts/\(selectedComment.commentKey)/followers")
-            let refFollows = refFollowPath.childByAutoId()
-            refFollows.setValue(newFollow)
-            sender.selected = !sender.selected
-//            let newFollowed = ["userId": selectedComment.userId]
-//            let refFollowedPath = BASE_URL.child("/Followed")
-//            let refFollowed = refFollowedPath.childByAutoId()
-//            refFollowed.setValue(newFollowed)
-        }
     }
     
     func updateSelectedChoice(selectedChoice:String, tag:Int) {
@@ -183,7 +145,6 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
         let selectedComment = globalPost[tag]
         
         for each in customCell.globalPost.tempDict {
-            let tempDict = each.1 as? Dictionary<String,AnyObject>
             
             if ( each.1["userComment"]  as! String == selectedChoice) {
                 let newLike = ["userId": currentUserID]
@@ -200,6 +161,70 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
         }
     }
 
+    //MARK: Follow Post
+    func followPost (sender: UIButton) {
+        let selectedComment = globalPost[sender.tag]
+        
+        if !sender.selected {
+            let newFavorite = ["userId": currentUserID]
+            let refFavoritePath = BASE_URL.child("/Posts/\(selectedComment.commentKey)/favorites")
+            let refFavorites = refFavoritePath.childByAutoId()
+            refFavorites.setValue(newFavorite)
+            sender.selected = !sender.selected
+        }
+        else {
+            let favorite = ["userId": currentUserID]
+            let keys = (selectedComment.favoriteDict as NSDictionary).allKeysForObject(favorite)
+            
+            for key in keys {
+                let refFollowPath = BASE_URL.child("/Posts/\(selectedComment.commentKey)/favorites/\(key as! String)")
+                refFollowPath.removeValue()
+                sender.selected = !sender.selected
+            }
+        }
+    }
+    
+    //MARK: Follow User
+    func followUser(sender: UIButton) {
+        let selectedComment = globalPost[sender.tag]
+        if sender.selected {
+            let follow = ["userId": currentUserID]
+            let keys = (selectedComment.followDict as NSDictionary).allKeysForObject(follow)
+            
+            for key in keys {
+                let refFollowPath = BASE_URL.child("/Posts/\(selectedComment.commentKey)/followers/\(key as! String)")
+                refFollowPath.removeValue()
+                sender.selected = !sender.selected            }
+        }
+        else {
+            let newFollow = ["userId": currentUserID]
+            let refFollowPath = BASE_URL.child("/Posts/\(selectedComment.commentKey)/followers")
+            let refFollows = refFollowPath.childByAutoId()
+            refFollows.setValue(newFollow)
+            sender.selected = !sender.selected
+        }
+    }
+    
+    //MARK: Select Buy Button
+    func choice1Buy(sender: UIButton) {
+        let indexPath = NSIndexPath(forRow: sender.tag, inSection: 0) // This defines what indexPath is which is used later to define a cell
+        let customCell = tableView.cellForRowAtIndexPath(indexPath) as! globalFeedTableViewCell! // This is where the magic happens - reference to the cell
+        if customCell.choice1Label.text! == "Choice 1" {
+            return
+        }
+        
+        self.performSegueWithIdentifier("showBuy", sender: nil)
+    }
+    
+    func choice2Buy(sender: UIButton) {
+        let indexPath = NSIndexPath(forRow: sender.tag, inSection: 0) // This defines what indexPath is which is used later to define a cell
+        let customCell = tableView.cellForRowAtIndexPath(indexPath) as! globalFeedTableViewCell! // This is where the magic happens - reference to the cell
+        if customCell.choice2Label.text! == "Choice 2" {
+            return
+        }
+        self.performSegueWithIdentifier("showBuy", sender: nil)
+    }
+    
     //MARK: TableView Protocol
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
@@ -240,11 +265,14 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
         // isFollowed by Me?
         print(comment.favoriteDict)
         let favorite = ["userId": currentUserID]
-        let keys = (comment.favoriteDict as? NSDictionary)?.allKeysForObject(favorite)
+        let keys = (comment.favoriteDict as NSDictionary).allKeysForObject(favorite)
         
-        let followKeys = (comment.followDict as? NSDictionary)?.allKeysForObject(favorite)
+        let followKeys = (comment.followDict as NSDictionary).allKeysForObject(favorite)
         
         if let cell = tableView.dequeueReusableCellWithIdentifier("globalViewCell") as? globalFeedTableViewCell {
+            
+            cell.configureCell(comment)
+            
             if (cellViewImage != "") {
                 if UIImage.isCached(cellViewImage) {
                     let image = UIImage.cachedImageWithURL(cellViewImage)
@@ -253,11 +281,24 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
                     }
                 }
                 else {
-                    cell.globalImageView.setImageWithURL(NSURL(string: cellViewImage))
+                    cell.globalImageView.sd_setImageWithURL(NSURL(string: cellViewImage))
+                }
+            }
+            if (comment.profileImage != "") {
+                if UIImage.isCached(comment.profileImage) {
+                    let image = UIImage.cachedImageWithURL(comment.profileImage)
+                    if (image != nil) {
+                        cell.profileImageView.image = image
+                    }
+                }
+                else {
+                    cell.profileImageView.sd_setImageWithURL(NSURL(string: comment.profileImage))
                 }
             }
             cell.globalTextField.delegate = self  // return key dismisses keyboard
-
+            
+            cell.geoLocationLabel.text = comment.location
+            
             // this code is for selecting a choice and incrementing the Likes and Dislikes in a given cell.
             cell.globalSendButton.tag = indexPath.row  // detect row the click came from
             cell.globalSendButton.addTarget(self, action: #selector(globalViewController.addComment(_:)), forControlEvents: UIControlEvents.TouchUpInside)
@@ -276,21 +317,28 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
             cell.followButton.tag = indexPath.row
             cell.followButton.addTarget(self, action: #selector(globalViewController.followUser(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             
+            cell.choice1BuyButton.tag = indexPath.row
+            cell.choice1BuyButton.addTarget(self, action: #selector(globalViewController.choice1Buy(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            
+            cell.choice2BuyButton.tag = indexPath.row
+            cell.choice2BuyButton.addTarget(self, action: #selector(globalViewController.choice2Buy(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            
             if comment.userId == currentUserID {
                 cell.followButton.hidden = true
             }
             
-            if (followKeys?.count > 0) {
+            if (followKeys.count > 0) {
                 cell.followButton.selected = true
             }
             else {
                 cell.followButton.selected = false
             }
             
-            if keys?.count > 0 {
+            if keys.count > 0 {
                 cell.likeButton.selected = true
             }
             //Update choise labels here after they have been sorted.
+            
             if (self.choicePost.count > 0 ) {
                 cell.choice1Label.text = self.choicePost[0]["userComment"] as? String
                 cell.voteNum1.text = "\(self.choicePost[0]["Like"] as! Int)"
@@ -301,8 +349,8 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
                     likesDict = (self.choicePost[0]["likes"] as? Dictionary <String, AnyObject>)!
                     print(likesDict)
                     let like = ["userId": currentUserID]
-                    let likeKeys = (likesDict as? NSDictionary)?.allKeysForObject(like)
-                    if (likeKeys?.count > 0) {
+                    let likeKeys = (likesDict as NSDictionary).allKeysForObject(like)
+                    if (likeKeys.count > 0) {
                         cell.choice1LikeButton.selected = true
                     }
                     else {
@@ -319,9 +367,9 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
                     let likesDict = self.choicePost[1]["likes"] as? Dictionary <String, AnyObject>
                     print(likesDict)
                     let like = ["userId": currentUserID]
-                    let likeKeys = (likesDict as? NSDictionary)?.allKeysForObject(like)
+                    let likeKeys = (likesDict! as NSDictionary).allKeysForObject(like)
 
-                    if (likeKeys?.count > 0) {
+                    if (likeKeys.count > 0) {
                         cell.choice2LikeButton.selected = true
                     }
                     else {
@@ -332,8 +380,6 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
             
             cell.lblComments.text = "\(comment.tempDict.count - 1)"
             cell.favoriteNum.text = "\(comment.favoriteDict.count - 1)"
-            
-            cell.configureCell(comment)
 
             return cell
         }
@@ -357,20 +403,23 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
                 (segue.destinationViewController as! MoreCommentViewController).globalPost = globalPost[index]
             }
         }
-        else if (segue.identifier == "buy2Segue") {
+        else if (segue.identifier == "showBuy") {
             print("BUY 2 Button pressed")
-        }
-        else if (segue.identifier == "buy3Segue") {
-        print("BUY 3 Button pressed")
         }
     }
     
     
-    //Load data from Firebase
+    //MARK: Load Data from Firebase
     func loadDataFromFirebase() {
         print("Global: Loading data from Firebase")
-        AppUtility.showActivityOverlay("")
-        DataService.dataService.POST_REF.observeEventType(.Value, withBlock: { snapshot in
+        if loadNum == 0 {
+            AppUtility.showActivityOverlay("")
+        }
+        commentLimit = commentLimit + (2 * loadNum)
+        let lastestComments = DataService.dataService.POST_REF.queryLimitedToLast(commentLimit)
+        
+        lastestComments.observeEventType(.Value, withBlock: { snapshot in
+            AppUtility.hideActivityOverlay()
             self.globalPost = []
             if let snapshots = snapshot.children.allObjects as? [FIRDataSnapshot] {
                 for snap in snapshots {
@@ -383,14 +432,18 @@ class globalViewController: UIViewController,UITableViewDelegate,UITableViewData
                         // Items are returned chronologically, but it's more fun with the newest comments first.
                         self.globalPost.insert(userPost, atIndex: 0)
                         self.preLoadImage(userPost.userImage)
+                        self.preLoadImage(userPost.profileImage)
                     }
                 }
             }
-            AppUtility.hideActivityOverlay()
             // Be sure that the tableView updates when there is new data.
             dispatch_async(dispatch_get_main_queue(), {
                 self.tableView.reloadData()
             })
+            if UInt(self.globalPost.count) == self.commentLimit {
+                self.loadNum = self.loadNum + 1
+                self.loadDataFromFirebase()
+            }
         })
     }
 

@@ -9,41 +9,35 @@
 import Foundation
 import Firebase
 
-class imageItViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate,UIPickerViewDataSource, UIPickerViewDelegate {
+class imageItViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
     
     @IBOutlet weak var currentImage: UIImageView!
-    @IBOutlet weak var catPickerOutlet: UIPickerView!
+    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var collectionViewLayout: UICollectionViewFlowLayout!
     
+    private var sideSize: CGFloat!
     
     var base64String : String?
     var selectedCat: String = "Other"  // defaut is set to Other unless selected
     
-    //    var postKey: String?
+    var selectedImage: UIImage!
     
     let imagePicker: UIImagePickerController! = UIImagePickerController()
     
-    //    var commentsDict = Dictionary<String, String>() // declare empty dictionary to store user comments
-    
-    
     var userComments = [Posts]()
-    var pickerCatDataSource = ["Clothes", "Automobile", "Vegetables", "Fruits","Toys","Electronics","Other"];
+    var pickerCatDataSource = ["Toys", "Electronics", "Furniture", "Clothes", "Food", "Apple", "Android", "Audio", "Jewellry", "Footwear", "Cars", "Accessories","Hats","Wedding","Home", "Other"];
     
+    var isRefresh = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Set this controller as the camera delegate
+        sideSize = (UIScreen.mainScreen().bounds.width - 43) / 4
+        collectionViewLayout.itemSize = CGSize(width: sideSize, height: 50)
+        collectionViewLayout.minimumLineSpacing = 1
+        collectionViewLayout.minimumInteritemSpacing = 1
+        
         imagePicker.delegate = self
-        
-        
-        //PickerView related code
-        
-        self.catPickerOutlet.dataSource = self;
-        self.catPickerOutlet.delegate = self;
-        catPickerOutlet.selectRow(pickerCatDataSource.count - 1, inComponent: 0, animated: true)
-        // Load camera here when the tab bar item is clicked.
-        [self.takePicture(self)]
-        
     }
     
     
@@ -55,6 +49,17 @@ class imageItViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        if isRefresh {
+            self.collectionView.reloadData()
+            let indexPath = NSIndexPath(forItem: pickerCatDataSource.count - 1, inSection: 0)
+            self.collectionView.selectItemAtIndexPath(indexPath, animated: true, scrollPosition: UICollectionViewScrollPosition.None)
+        }
+    }
+    
+    @IBAction func openLibrary(sender: AnyObject) {
+        imagePicker.allowsEditing = false
+        imagePicker.sourceType = .PhotoLibrary
+        presentViewController(imagePicker, animated: true, completion: nil)
     }
     
     @IBAction func takePicture(sender: AnyObject) {
@@ -71,24 +76,21 @@ class imageItViewController: UIViewController, UIImagePickerControllerDelegate, 
         } else {
             postAlert("Camera inaccessable", message: "Application cannot access the camera.")
         }
-        
-        
     }
     
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         print("Got an image")
-        self.catPickerOutlet.hidden = false // UnHide the picker menu
         
         if let pickedImage:UIImage = (info[UIImagePickerControllerOriginalImage]) as? UIImage {
             //        let selectorToCall = Selector("imageWasSavedSuccessfully:didFinishSavingWithError:context:")
             let selectorToCall = #selector(imageItViewController.imageWasSavedSuccessfully(_:didFinishSavingWithError:context:))
             UIImageWriteToSavedPhotosAlbum(pickedImage, self, selectorToCall, nil)
         }
-        
+        self.isRefresh = false
         imagePicker.dismissViewControllerAnimated(true, completion: {
             
-            
+            self.isRefresh = true
             // Anything you want to happen when the user saves an image -- Upload to Firebase.
             
         })
@@ -96,13 +98,10 @@ class imageItViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         print("User canceled image")
+        self.isRefresh = false
         dismissViewControllerAnimated(true, completion: {
             // Anything you want to happen when the user selects cancel
-            
-            self.catPickerOutlet.hidden = true // Hide the picker menu
-            
-            
-            
+            self.isRefresh = true
         })
     }
     
@@ -116,13 +115,10 @@ class imageItViewController: UIViewController, UIImagePickerControllerDelegate, 
                 
                 
                 self.currentImage.image = image
-                
+                self.selectedImage = image
             })
         }
     }
-    
-    
-    
     
     func postAlert(title: String, message: String)
     {
@@ -136,8 +132,6 @@ class imageItViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     
     // add text to image
-    
-    
     func addTextToImage(text: NSString, inImage: UIImage, atPoint:CGPoint)     -> UIImage{
         
         // Setup the font specific variables
@@ -180,68 +174,45 @@ class imageItViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         return newImag!
         
-        
-        
-        //        // Create a point within the space that is as bit as the image
-        //        let rect = CGRectMake(atPoint.x, atPoint.y, inImage.size.width, inImage.size.height)
-        //
-        //        // Draw the text into an image
-        //        text.drawInRect(rect, withAttributes: textFontAttributes)
-        //
-        //        // Create a new image out of the images we have created
-        //        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        //
-        //        // End the context now that we have the image we need
-        //        UIGraphicsEndImageContext()
-        //
-        //        //Pass the image back up to the caller
-        //        return newImage!
-        
     }
     
-    
-    
-    
-    
-    //picked delegate methods
-    
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
-        return 1
+    //MARK: CollectionView Protocol
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return pickerCatDataSource.count
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return pickerCatDataSource.count;
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CatCell", forIndexPath: indexPath) as! CatCell
+        cell.catlabel.text = pickerCatDataSource[indexPath.row]
+        cell.contentView.backgroundColor = UIColor.whiteColor()
+        cell.catlabel.textColor = UIColor.blackColor()
+        if (indexPath.row == pickerCatDataSource.count - 1) {
+            cell.contentView.backgroundColor = COLOR_BLUE
+            cell.catlabel.textColor = UIColor.whiteColor()
+        }
+        return cell
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return pickerCatDataSource[row]
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        selectedCat = pickerCatDataSource[indexPath.row]
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! CatCell
+        cell.contentView.backgroundColor = COLOR_BLUE
+        cell.catlabel.textColor = UIColor.whiteColor()
     }
     
-    // determine which row is selected
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
-    {
-        /*
-         if(row == 0)
-         {
-         
-         print("Selected \(pickerCatDataSource[row])")
-         selectedCat = pickerCatDataSource[row]
-         
-         }
-         */
-        print("Selected \(pickerCatDataSource[row])")
-        selectedCat = pickerCatDataSource[row]
-        
-        
+    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! CatCell
+        cell.contentView.backgroundColor = UIColor.whiteColor()
+        cell.catlabel.textColor = UIColor.blackColor()
     }
-    
-    
-    
     // UPload post to Firebase when user clicks Share Button
-    
     @IBAction func sharePost(sender: AnyObject) {
         print("Sharing Now")
         
+        if (selectedImage == nil) {
+            AppUtility.showAlert("Please select Image", title: "Error")
+            return
+        }
         // Prepare the image for upload
         var data: NSData = NSData()
         var modImage:UIImage
@@ -267,14 +238,20 @@ class imageItViewController: UIViewController, UIImagePickerControllerDelegate, 
                     print ("inside download url is \(downloadURL)")
                     
                     // we have the url for the image now and its been uploaded to firebase storage.
+                    var location = currentUser.userLocation
+                    if location == "" {
+                        location = "Unknown"
+                    }
                     
                     let newPost: Dictionary<String,AnyObject> = [
-                        "userEmail": currentUserEmail,
+                        "userEmail": currentUser.userEmail,
                         "comments": "Updating..",
-                        "userName": currentUserName,
-                        "userImage": /*base64String*/ downloadURL,
+                        "userName": currentUser.userName,
+                        "userImage": downloadURL,
+                        "profileImage": currentUser.profileURL,
                         "category": self.selectedCat,
-                        "userId": currentUserID
+                        "userId": currentUserID,
+                        "location": location
                     ]
                     
                     let postKey = DataService.dataService.createNewComment(newPost)
@@ -282,7 +259,7 @@ class imageItViewController: UIViewController, UIImagePickerControllerDelegate, 
                     
                     //update comment here
                     let newComment: Dictionary <String,AnyObject> = [
-                        "userName" : currentUserName,
+                        "userName" : currentUser.userName,
                         "userComment" : "What is this",
                         "Like" :-1,
                         "Dislike" : -1
@@ -305,4 +282,8 @@ class imageItViewController: UIViewController, UIImagePickerControllerDelegate, 
             }
         }
     }
+}
+
+class CatCell: UICollectionViewCell {
+    @IBOutlet weak var catlabel: UILabel!
 }

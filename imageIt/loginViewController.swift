@@ -8,7 +8,6 @@
 
 import Foundation
 import Firebase
-import UIKit
 import FBSDKLoginKit
 import GoogleSignIn
 import TwitterKit
@@ -24,11 +23,6 @@ class loginViewController: UIViewController,GIDSignInDelegate, GIDSignInUIDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib
-//        
-//        signInButton.style = .Wide
-//        signInButton.frame = CGRectMake(0, 0, 200, 50)
-//        self.view.addSubview(signInButton)
     }
     
     override func didReceiveMemoryWarning() {
@@ -43,10 +37,9 @@ class loginViewController: UIViewController,GIDSignInDelegate, GIDSignInUIDelega
     //MARK: Action
     // Pressing Enter after entering password triggers this action.
     @IBAction func passwordFieldActionTriggered(sender: AnyObject) {
-        
-        // Login function goes here.
         AppUtility.loginWithEmail(userEmailField.text!, password: passwordField.text!, compleionClosure: { (success) in
             if success {
+                
                 ApplicationDelegate.showTabBarController()
             }
         })
@@ -54,11 +47,28 @@ class loginViewController: UIViewController,GIDSignInDelegate, GIDSignInUIDelega
     
     //separate button to log in already registered user for UI simplicity.
     @IBAction func logInAccount(sender: AnyObject) {
-        
         if isInputValid() {
             AppUtility.loginWithEmail(userEmailField.text!, password: passwordField.text!, compleionClosure: { (success) in
                 if success {
-                    ApplicationDelegate.showTabBarController()
+                    DataService.dataService.USER_REF.queryOrderedByChild("userId").queryEqualToValue(currentUserID).observeEventType(.Value, withBlock: { (snapshot) in
+                        if let snapshots = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                            for snap in snapshots {
+                                if let userDictionary = snap.value as? Dictionary<String, AnyObject> {
+                                    currentUser.userEmail = userDictionary["userEmail"] as! String
+                                    currentUser.userName = userDictionary["userName"] as! String
+                                    currentUser.userBirth = userDictionary["userBirth"] as! String
+                                    currentUser.profileURL = userDictionary["userImage"] as! String
+                                    currentUser.userId = userDictionary["userId"] as! String
+                                    currentUser.userLocation = userDictionary["userLocation"] as! String
+                                    print(currentUser)
+                                    ApplicationDelegate.showTabBarController()
+                                }
+                            }
+                        } else {
+                            print("we don't have that, add it to the DB now")
+                            self.performSegueWithIdentifier("completeProfile", sender: nil)
+                        }
+                    })
                 }
             })
         }
@@ -67,7 +77,7 @@ class loginViewController: UIViewController,GIDSignInDelegate, GIDSignInUIDelega
     @IBAction func facebookLogin(sender: AnyObject) {
         AppUtility.loginWithFacebook { (success) in
             if success {
-                ApplicationDelegate.showTabBarController()
+                self.performSegueWithIdentifier("completeProfile", sender: nil)
             }
         }
     }
@@ -86,12 +96,13 @@ class loginViewController: UIViewController,GIDSignInDelegate, GIDSignInUIDelega
         Twitter.sharedInstance().logInWithCompletion { (session, error) in
             if let session = session {
                 print("Twitter Login Ok.")
+                userName = session.userName
                 let twitterToken = session.authToken
                 let twitterSecret = session.authTokenSecret
                 let credential = FIRTwitterAuthProvider.credentialWithToken(twitterToken, secret: twitterSecret)
                 AppUtility.firebaseAuth(credential, completionClosure: { (success) in
                     if success {
-                        ApplicationDelegate.showTabBarController()
+                        self.performSegueWithIdentifier("completeProfile", sender: nil)
                     }
                 })
             }
@@ -122,13 +133,15 @@ class loginViewController: UIViewController,GIDSignInDelegate, GIDSignInUIDelega
             AppUtility.showAlert(error.localizedDescription, title: "Login Error")
         }
         
+        userName = user.profile.name
         let authentication = user.authentication
         let googleToken = authentication.idToken
         let accessToken = authentication.accessToken
         let credential = FIRGoogleAuthProvider.credentialWithIDToken(googleToken, accessToken: accessToken)
         AppUtility.firebaseAuth(credential) { (success) in
             if success {
-                ApplicationDelegate.showTabBarController()
+                self.performSegueWithIdentifier("completeProfile", sender: nil)
+                //ApplicationDelegate.showTabBarController()
             }
         }
     }
@@ -160,5 +173,9 @@ class loginViewController: UIViewController,GIDSignInDelegate, GIDSignInUIDelega
             AppUtility.showAlert("Check your email and try again", title: "Email not valid")
             return false
         }
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    
     }
 }

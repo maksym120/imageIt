@@ -14,8 +14,9 @@ class globalContainerViewController: UIViewController {
     
     
     @IBOutlet weak var globalViewContainer: UIView!
-    
     @IBOutlet weak var followedViewContainer: UIView!
+    @IBOutlet weak var lblGlobal: UILabel!
+    @IBOutlet weak var lblFollow: UILabel!
     
     var bGlobal = true
     var kColor: UIColor!
@@ -27,9 +28,9 @@ class globalContainerViewController: UIViewController {
         
         kColor = globalBorder.backgroundColor
         followingBorder.backgroundColor = UIColor.clearColor()
+        lblGlobal.textColor = UIColor.redColor()
+        lblFollow.textColor = kColor
     }
-    
-
     
     @IBAction func loadGlobaklFeedView(sender: AnyObject) {
         
@@ -52,6 +53,8 @@ class globalContainerViewController: UIViewController {
             
         })
         
+        lblGlobal.textColor = UIColor.redColor()
+        lblFollow.textColor = kColor
         followingBorder.backgroundColor = UIColor.clearColor()
         globalBorder.backgroundColor = kColor
         bGlobal = true
@@ -81,6 +84,8 @@ class globalContainerViewController: UIViewController {
             
         })
         
+        lblGlobal.textColor = kColor
+        lblFollow.textColor = UIColor.redColor()
         globalBorder.backgroundColor = UIColor.clearColor()
         followingBorder.backgroundColor = kColor
         bGlobal = false

@@ -95,12 +95,6 @@ class Utility: NSObject {
             }
             else {
                 currentUserID = user!.uid
-                if let username = user?.displayName {
-                    currentUserName = username
-                }
-                if let useremail = user?.email {
-                    currentUserEmail = useremail
-                }
                 compleionClosure(success: true)
             }
             
@@ -137,6 +131,7 @@ class Utility: NSObject {
                 
             else {
                 print("You’re inz and result is \(facebookResult.description) ;)")
+                self.getFacebookUserInfo()
                 let fbToken = FBSDKAccessToken.currentAccessToken().tokenString
                 print("Facebook Access Token : \(fbToken)")
                 let credential = FIRFacebookAuthProvider.credentialWithAccessToken(fbToken)
@@ -148,6 +143,24 @@ class Utility: NSObject {
         });
     }
     
+    func getFacebookUserInfo() {
+        let request = FBSDKGraphRequest(graphPath:"me", parameters: nil)
+
+        request.startWithCompletionHandler {
+            
+            (connection, result, error) in
+            
+            if error != nil {
+                // Some error checking here
+            }
+            else if let userData = result as? [String:AnyObject] {
+                
+                userName = (userData["name"] as? String)!
+                
+            }
+        }
+    }
+    
     func firebaseAuth(credential: FIRAuthCredential, completionClosure: ((success: Bool) -> () )) {
         self.showActivityOverlay("")
         FIRAuth.auth()?.signInWithCredential(credential) { (user, error) in
@@ -156,17 +169,6 @@ class Utility: NSObject {
                 print("SUCESS")
                 completionClosure(success: true)
                 currentUserID = user!.uid
-                if let username = user?.displayName {
-                    currentUserName = username
-                }
-                if let useremail = user?.email {
-                    currentUserEmail = useremail
-                }
-//                
-//                let newFollowed: Dictionary<String, AnyObject> = ["userId": currentUserID]
-//                let refFollowedPath = BASE_URL.child("/Followed")
-//                let refFollowed = refFollowedPath.childByAutoId()
-//                refFollowed.setValue(newFollowed)
             }
             else {
                 print(error?.description)

@@ -43,19 +43,44 @@ class MoreCommentViewController: UIViewController, UITableViewDelegate, UITableV
         cell.lblVoteNum.text = "\(choicePost[indexPath.row + 2]["Like"] as! Int)"
         cell.btnVote.tag = indexPath.row
         cell.btnVote.addTarget(self, action: #selector(MoreCommentViewController.choiceLiked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        cell.btnVote.setImage(UIImage(named: "like-neutral.png"), forState: UIControlState.Normal)
+        cell.btnVote.setImage(UIImage(named: "liked.png"), forState: UIControlState.Selected)
+        
+        if (choicePost[indexPath.row + 2]["likes"] != nil) {
+            var likesDict: Dictionary = Dictionary <String, AnyObject>()
+            likesDict = (self.choicePost[indexPath.row + 2]["likes"] as? Dictionary <String, AnyObject>)!
+            print(likesDict)
+            let like = ["userId": currentUserID]
+            let likeKeys = (likesDict as NSDictionary).allKeysForObject(like)
+            if (likeKeys.count > 0) {
+                cell.btnVote.selected = true
+            }
+            else {
+                cell.btnVote.selected = false
+            }
+        }
         return cell
     }
     
     @IBAction func choiceLiked (sender: UIButton) {
+        if sender.selected {
+            return
+        }
         let indexPath = NSIndexPath(forRow: sender.tag, inSection: 0) // This defines what indexPath is which is used later to define a cell
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! CommentCell // This is where the magic happens - reference to the cell
         cell.lblVoteNum.text = "\(Int(cell.lblVoteNum.text!)! + 1)"
         self.updateSelectedChoice(cell.lblComment.text!)
+        sender.selected = !sender.selected
     }
 
     func updateSelectedChoice(selectedChoice:String) {
         
         for each in globalPost.tempDict {
+            let newLike = ["userId": currentUserID]
+            let refLikePath = BASE_URL.child("/Posts/\(globalPost.commentKey)/comments/\(each.0)/likes")
+            let refLikes = refLikePath.childByAutoId()
+            refLikes.setValue(newLike)
             
             if ( each.1["userComment"]  as! String == selectedChoice) {
                 // This transaction just updates the Like number in Firebase.

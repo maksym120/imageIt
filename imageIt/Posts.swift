@@ -23,6 +23,8 @@ class Posts {
     var _userName: String!
     var _postCat: String!
     var _userId: String!
+    var _profileImage: String!
+    var _location: String!
 //    var commentsDict:tempCommentsDict!
     
     var _tempDict: Dictionary = Dictionary<String, AnyObject>()
@@ -77,6 +79,14 @@ class Posts {
         return _userId
     }
     
+    var profileImage: String {
+        return _profileImage
+    }
+    
+    var location: String {
+        return _location
+    }
+    
     //init the class here
     init ( key: String, dictionary: Dictionary<String,AnyObject>) {
         
@@ -111,6 +121,13 @@ class Posts {
             
         }
 
+        if let profileImage = dictionary["profileImage"] as? String {
+            self._profileImage = profileImage
+        }
+        
+        if let location = dictionary["location"] as? String {
+            self._location = location
+        }
         
         if let tempDict = dictionary["comments"] as? Dictionary <String,AnyObject> {
         

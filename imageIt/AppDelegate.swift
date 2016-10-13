@@ -39,11 +39,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FIRAuth.auth()?.addAuthStateDidChangeListener { auth, user in
             if let user = user {
-                self.showTabBarController()
                 currentUserID = user.uid
-                if let email = user.email {
-                    currentUserEmail = email
-                }
+                DataService.dataService.USER_REF.queryOrderedByChild("userId").queryEqualToValue(currentUserID).observeEventType(.Value, withBlock: { (snapshot) in
+                    if let snapshots = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                        for snap in snapshots {
+                            if let userDictionary = snap.value as? Dictionary<String, AnyObject> {
+                                currentUser.userEmail = userDictionary["userEmail"] as! String
+                                currentUser.userName = userDictionary["userName"] as! String
+                                currentUser.userBirth = userDictionary["userBirth"] as! String
+                                currentUser.profileURL = userDictionary["userImage"] as! String
+                                currentUser.userId = userDictionary["userId"] as! String
+                                currentUser.userLocation = userDictionary["userLocation"] as! String
+                                print(currentUser)
+                                self.showTabBarController()
+                            }
+                        }
+                    } else {
+                        print("we don't have that, add it to the DB now")
+                    }
+                })
             } else {
                 self.showLoginViewController()
             }

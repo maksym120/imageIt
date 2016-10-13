@@ -15,6 +15,8 @@ class localContainerViewController: UIViewController {
     
     @IBOutlet weak var containerFavView: UIView!
     @IBOutlet weak var conateinerMyPostsView: UIView!
+    @IBOutlet weak var lblMyPost: UILabel!
+    @IBOutlet weak var lblFavorite: UILabel!
     
     @IBOutlet weak var myPostBorder: UIView!
     @IBOutlet weak var favoriteBorder: UIView!
@@ -25,6 +27,8 @@ class localContainerViewController: UIViewController {
         super.viewDidLoad()
         kColor = myPostBorder.backgroundColor
         favoriteBorder.backgroundColor = UIColor.clearColor()
+        lblMyPost.textColor = UIColor.redColor()
+        lblFavorite.textColor = kColor
     }
 
     
@@ -50,6 +54,8 @@ class localContainerViewController: UIViewController {
             
         })
         
+        lblMyPost.textColor = UIColor.redColor()
+        lblFavorite.textColor = kColor
         favoriteBorder.backgroundColor = UIColor.clearColor()
         myPostBorder.backgroundColor = kColor
         gLocal = true
@@ -79,6 +85,8 @@ class localContainerViewController: UIViewController {
             
         })
     
+        lblMyPost.textColor = kColor
+        lblFavorite.textColor = UIColor.redColor()
         myPostBorder.backgroundColor = UIColor.clearColor()
         favoriteBorder.backgroundColor = kColor
         gLocal = false

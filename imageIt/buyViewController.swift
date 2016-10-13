@@ -15,12 +15,14 @@ class buyViewController: UIViewController, UITableViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        
-        
     }
     
     
+    @IBAction func onBackBtnClick(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    //MARK: TableView Protocol
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         
         return 1
@@ -31,17 +33,12 @@ class buyViewController: UIViewController, UITableViewDelegate {
         return 3
     }
     
-    
-    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
      
         print(" In buy custom cell")
         
         if let cell = tableView.dequeueReusableCellWithIdentifier("buyCellViewIdentifier") as? buyViewControllerCell {
 
-//            let image: UIImage = UIImage(named: "buySample.png")!
-//            
-//            cell.buyCellImageView = UIImageView (image: image)
             
         return cell
         
@@ -51,10 +48,5 @@ class buyViewController: UIViewController, UITableViewDelegate {
             return buyViewControllerCell()
             
         }
-
-        
-        
     }
-    
-
 }
